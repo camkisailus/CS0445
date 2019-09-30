@@ -45,8 +45,8 @@ public interface ShelfInterface<T> {
      * You need to remove the item on the position 0 every time and shift the values one position left.
      *</p>
      *
-     * @param row  The row of the object to be added.
-     * @param column  The column of the object to be added
+     * @param row  The row of the object to be removed.
+     * @param column  The column of the object to be removed
      */
     public void remove(int row, int column);
 
@@ -85,5 +85,5 @@ public interface ShelfInterface<T> {
      *
      * @return  A newly-allocated array of all the entries in this shelf
      */
-    public T[][][] toArray();
+    //public T[][][] toArray();
 }

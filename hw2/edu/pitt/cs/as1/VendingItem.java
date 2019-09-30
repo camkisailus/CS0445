@@ -1,3 +1,5 @@
+package edu.pitt.cs.as1;
+
 public final class VendingItem implements VendingItemInterface
 {
 	private final double price;
@@ -18,14 +20,5 @@ public final class VendingItem implements VendingItemInterface
 	{
 		return name;
 	}
- 
-
-
-
-
-
-
-
-
 
 }

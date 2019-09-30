@@ -126,7 +126,7 @@ public class VendingMachine {
         for (int i = 0; i < ROWS; ++i)
             for (int j = 0; j < COLUMNS; ++j) {
                 for (int k = 0; k < QUANTITY; ++k) {
-                    if (shelf.isEmpty(i,j,k)) {
+                    if (!shelf.isEmpty(i,j,k)) {
                         numberOfItems++;
                     }
                 }
