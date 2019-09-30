@@ -21,4 +21,9 @@ public final class VendingItem implements VendingItemInterface
 		return name;
 	}
 
+	public String toString()
+	{
+		return name;
+	}
+
 }

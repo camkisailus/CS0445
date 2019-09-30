@@ -1,36 +1,36 @@
 package edu.pitt.cs.as1;
 /**
  * ShelfInterface is an interface that describes the operations of the ADT Shelf. A Shelf is a
- * 3 D collection of objects. The first two dimensions are the rows and column. The last dimension is the quantity
+ * 3 D collection of objects. The first two dimensions are the rows and column. The last dimension is the quantity (depth)
  */
 public interface ShelfInterface<T> {
 
     /**
-     * Determines the entry.
+     * Returns the item at row, column, position
      *
-     * @param row  The row of the object to be added.
-     * @param column  The column of the object to be added
-     * @param position  The position of the object to be added
-     * @return T item the vending item in this position
+     * @param row  The row of the object to be retrieved.
+     * @param column  The column of the object to be retrieved
+     * @param position  The position of the object to be retrieved
+     * @return T, the entry at this row, column, position
      */
     public T get(int row, int column, int position);
 
     /**
-     * Determines the name of the entry.
+     * Determines the name of the entry at row, column, position
      *
-     * @param row  The row of the object to be added.
-     * @param column  The column of the object to be added
-     * @param position  The position of the object to be added
-     * @return  The String of name for this entry
+     * @param row  The row of the object whose name is retrieved
+     * @param column  The column of the object whose name is retrieved
+     * @param position  The position of the object whose name is retrieved
+     * @return  The String representation of the object at this row, column, position
      */
     public String getName(int row, int column, int position);
 
     /**
      * Adds a new entry to this shelf
      *
-     * <p> If newEntry is not null then add the newEntry to the corresponding row, column and position.
+     * <p> If o is not null then add the o to the corresponding row, column, and position.
      *
-     * <p> If newEntry is null, then the entry is ignored
+     * <p> If o is null, then the entry is ignored.
      * @param row  The row of the object to be added.
      * @param column  The column of the object to be added
      * @param position  The position of the object to be added
@@ -42,11 +42,11 @@ public interface ShelfInterface<T> {
     /**
      * Removes an entry from this shelf
      *<p>
-     * You need to remove the item on the position 0 every time and shift the values one position left.
+     * You need to remove the item at position 0 every time and shift the values one position left.
      *</p>
      *
      * @param row  The row of the object to be removed.
-     * @param column  The column of the object to be removed
+     * @param column  The column of the object to be removed.
      */
     public void remove(int row, int column);
 
@@ -55,21 +55,19 @@ public interface ShelfInterface<T> {
      * using the .equals() method.
      *
      * <p> If this shelf contains entry, then contains returns true. Otherwise
-     * (including if this shelf is empty), contains returns false. If entry is
-     * null, then remove throws IllegalArgumentException. The method never
-     * modifies this set.
+     * (including if this shelf is empty), contains returns false.  If entry is null,
+     * return false.
      *
      * @param entry  The entry to locate
-     * @return  true if this shelf contains entry; false if not
-     * @throws  false  If entry is null
+     * @return  true if this shelf contains entry; false otherwise
      */
     public boolean contains(T entry);
 
 
     /**
-     * Determines whether this shelf is empty for a specific item.
+     * Determines whether the shelf at a specific row, column, position is empty.
      *
-     * @return true if this it is empty; false if not
+     * @return true if this is empty; false if not
      */
     public boolean isEmpty(int row, int column, int position);
 
@@ -79,11 +77,11 @@ public interface ShelfInterface<T> {
      * <p> A 3D array is returned that contains a reference to each of the entries
      * in this shelf.
      *
-     * <p> If the implementation of set is array-backed, toArray will not return
+     * <p> If the implementation of Shelf is array-backed, toArray will not return
      * the private backing array. Instead, a new array will be allocated with
      * the appropriate capacity.
      *
      * @return  A newly-allocated array of all the entries in this shelf
      */
-    //public T[][][] toArray();
+    public T[][][] toArray();
 }

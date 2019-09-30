@@ -50,7 +50,6 @@ public class Shelf<T> implements ShelfInterface<T>
 		if(entry == null)
 		{
 			return false;
-			//throw new IllegalArgumentException("entry to contains must not be null");
 		}
 		for (int i = 0; i <rows;i++){
 			for(int j = 0;j<columns;j++){
