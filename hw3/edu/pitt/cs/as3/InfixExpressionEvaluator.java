@@ -12,35 +12,22 @@ import java.io.StreamTokenizer;
  * should convert and evaluate in a pipelined fashion, in a single pass.
  */
 public class InfixExpressionEvaluator {
-    // Tokenizer to break up our input into tokens
+   
     StreamTokenizer tokenizer;
 
-    // Stacks for operators (for converting to postfix) and operands (for
-    // evaluating)
     StackInterface<Character> operatorStack;
     StackInterface<Double> operandStack;
 
-    /**
-     * Initializes the evaluator to read an infix expression from an input
-     * stream.
-     * @param input the input stream from which to read the expression
-     */
     public InfixExpressionEvaluator(InputStream input) {
-        // Initialize the tokenizer to read from the given InputStream
+      
         tokenizer = new StreamTokenizer(new BufferedReader(
                 new InputStreamReader(input)));
-
-        // StreamTokenizer likes to consider - and / to have special meaning.
-        // Tell it that these are regular characters, so that they can be parsed
-        // as operators
         tokenizer.ordinaryChar('-');
         tokenizer.ordinaryChar('/');
 
-        // Allow the tokenizer to recognize end-of-line, which marks the end of
-        // the expression
+
         tokenizer.eolIsSignificant(true);
 
-        // Initialize the stacks
         operatorStack = new ArrayStack<Character>();
         operandStack = new ArrayStack<Double>();
     }
@@ -50,18 +37,18 @@ public class InfixExpressionEvaluator {
      * then returns the resulting value
      * @return the value of the infix expression that was parsed
      */
+
     public Double evaluate() throws ExpressionError {
-        // Get the first token. If an IO exception occurs, replace it with a
-        // runtime exception, causing an immediate crash.
+        int previousToken=-1;
+
         try {
             tokenizer.nextToken();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        // Continue processing tokens until we find end-of-line
         while (tokenizer.ttype != StreamTokenizer.TT_EOL) {
-            // Consider possible token types
+            
             switch (tokenizer.ttype) {
                 case StreamTokenizer.TT_NUMBER:
                     // If the token is a number, process it as a double-valued
@@ -89,32 +76,29 @@ public class InfixExpressionEvaluator {
                     // of bracket are interchangeable but must nest properly.
                     handleCloseBracket((char)tokenizer.ttype);
                     break;
+
                 case StreamTokenizer.TT_WORD:
-                    // If the token is a "word", throw an expression error
+                    
                     throw new ExpressionError("Unrecognized token: " +
                             tokenizer.sval);
                 default:
-                    // If the token is any other type or value, throw an
-                    // expression error
+                    
                     throw new ExpressionError("Unrecognized token: " +
-                            String.valueOf((char)tokenizer.ttype));
+                            String.valueOf((char) tokenizer.ttype));
             }
 
-            // Read the next token, again converting any potential IO exception
             try {
                 tokenizer.nextToken();
-            } catch(IOException e) {
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
-
-        // Almost done now, but we may have to process remaining operators in
-        // the operators stack
         handleRemainingOperators();
 
-        // Return the result of the evaluation
-        // TODO: Fix this return statement
-        return null;
+        if(!operandStack.isEmpty())
+            return operandStack.pop();
+        else
+            return 0.0;
     }
 
     /**
@@ -122,9 +106,9 @@ public class InfixExpressionEvaluator {
      * manipulates operatorStack and/or operandStack to process the operand
      * according to the Infix-to-Postfix and Postfix-evaluation algorithms.
      * @param operand the operand token that was encountered
-     */
+     */    
     void handleOperand(double operand) {
-        // TODO: Complete this method
+        operandStack.push(operand);
     }
 
     /**
@@ -134,7 +118,76 @@ public class InfixExpressionEvaluator {
      * @param operator the operator token that was encountered
      */
     void handleOperator(char operator) {
-        // TODO: Complete this method
+        int value = 0, topValue = 0;
+        boolean completed = false;
+        char next;
+        switch (operator) {
+            case '+':
+                value = 1;
+                break;
+            case '-':
+                value = 1;
+                break;
+            case '*':
+                value = 2;
+                break;
+            case '/':
+                value = 2;
+                break;
+            case '^':
+                operatorStack.push(operator);
+                completed = true;
+        }
+
+        while (!completed) {
+            if (operatorStack.isEmpty()) {
+                operatorStack.push(operator);
+                completed = true;
+            } else {
+                switch (operatorStack.peek()) {
+                    case '+':
+                        topValue = 1;
+                        break;
+                    case '-':
+                        topValue = 1;
+                        break;
+                    case '*':
+                        topValue = 2;
+                        break;
+                    case '/':
+                        topValue = 2;
+                        break;
+                    case '^':
+                        topValue = 3;
+                }
+            }
+
+            if (value > topValue && !completed) {
+                completed = true;
+                operatorStack.push(operator);
+            } else if(value<=topValue && ! completed){
+                next = operatorStack.pop();
+
+                switch (next) {
+                    case '+':
+                        operandStack.push(operandStack.pop() + operandStack.pop());
+                        break;
+                    case '-':
+                        operandStack.push((-1 * operandStack.pop()) + operandStack.pop());
+                        break;
+                    case '*':
+                        operandStack.push(operandStack.pop() * operandStack.pop());
+                        break;
+                    case '/':
+                        operandStack.push((1 / operandStack.pop()) * operandStack.pop());
+                        break;
+                    case '^':
+                        double tempPow = operandStack.pop();
+                        double tempOperand = operandStack.pop();
+                        operandStack.push(Math.pow(tempOperand, tempPow));
+                }
+            }
+        }
     }
 
     /**
@@ -142,9 +195,9 @@ public class InfixExpressionEvaluator {
      * manipulates operatorStack and/or operandStack to process the open bracket
      * according to the Infix-to-Postfix and Postfix-evaluation algorithms.
      * @param openBracket the open bracket token that was encountered
-     */
+     */    
     void handleOpenBracket(char openBracket) {
-        // TODO: Complete this method
+        operatorStack.push(openBracket);
     }
 
     /**
@@ -154,8 +207,46 @@ public class InfixExpressionEvaluator {
      * algorithms.
      * @param closeBracket the close bracket token that was encountered
      */
-    void handleCloseBracket(char closeBracket) {
-        // TODO: Complete this method
+    void handleCloseBracket(char closeBracket) throws ExpressionError {
+        int val;
+        if (closeBracket==')')
+            val=1;
+        else
+            val=2;
+
+        boolean completed = false;
+        char next;
+        while (!completed) {
+            next = operatorStack.pop();
+            switch (next) {
+                case '(':
+                    if(val != 1)
+                        throw new ExpressionError("Error: Parenthesised in incorrect order");
+                    else completed=true;
+                    break;
+                case '[':
+                    if(val != 2)
+                        throw new ExpressionError("Error: Parenthesised in incorrect order");
+                    else completed=true;
+                    break;
+                case '+':
+                    operandStack.push(operandStack.pop() + operandStack.pop());
+                    break;
+                case '-':
+                    operandStack.push((-1 * operandStack.pop()) + operandStack.pop());
+                    break;
+                case '*':
+                    operandStack.push(operandStack.pop() * operandStack.pop());
+                    break;
+                case '/':
+                    operandStack.push((1 / operandStack.pop()) * operandStack.pop());
+                    break;
+                case '^':
+                    double pow = operandStack.pop();
+                    double operand = operandStack.pop();
+                    operandStack.push(Math.pow(operand, pow));
+            }
+        }
     }
 
     /**
@@ -163,19 +254,51 @@ public class InfixExpressionEvaluator {
      * expression. It manipulates operatorStack and/or operandStack to process
      * the operators that remain on the stack, according to the Infix-to-Postfix
      * and Postfix-evaluation algorithms.
-     */
+     */    
     void handleRemainingOperators() {
-        // TODO: Complete this method
-    }
+        double pop1,pop2;
+        while(!operatorStack.isEmpty()){
+            char next;
 
+            next = operatorStack.pop();
+
+            if(!operandStack.isEmpty())
+                pop1=operandStack.pop();
+            else
+                throw new ExpressionError("Expression contains too few operands");
+            if(!operandStack.isEmpty())
+                pop2=operandStack.pop();
+            else
+                throw new ExpressionError("Expression contains too few operands");
+
+
+            switch (next) {
+                case '+':
+                    operandStack.push(pop1 + pop2);
+                    break;
+                case '-':
+                    operandStack.push((-1 * pop1) + pop2);
+                    break;
+                case '*':
+                    operandStack.push(pop1 * pop2);
+                    break;
+                case '/':
+                    operandStack.push((1 / pop1) * pop2);
+                    break;
+                case '^':
+                    operandStack.push(Math.pow(pop2, pop1));
+            }
+        }
+    }
 
     /**
      * Creates an InfixExpressionEvaluator object to read from System.in, then
      * evaluates its input and prints the result.
      * @param args not used
      */
+
     public static void main(String[] args) {
-        System.out.println("Infix expression:");
+        System.out.print("Infix expression: ");
         InfixExpressionEvaluator evaluator =
                 new InfixExpressionEvaluator(System.in);
         Double value = null;
@@ -192,4 +315,3 @@ public class InfixExpressionEvaluator {
     }
 
 }
-

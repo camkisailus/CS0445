@@ -3,13 +3,6 @@ package edu.pitt.cs.as3;
 import java.util.Arrays;
 import java.util.EmptyStackException;
 
-/**
- * A class of stacks whose entries are stored in an array.
- * @author Frank M. Carrano
- * @author Timothy M. Henry
- * @author William C. Garrison
- * @version 4.5
- */
 public final class ArrayStack<E> implements StackInterface<E> {
     // Array of stack entries
     private E[] stack;
@@ -69,4 +62,3 @@ public final class ArrayStack<E> implements StackInterface<E> {
         }
     }
 }
-
