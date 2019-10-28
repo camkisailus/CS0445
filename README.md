@@ -13,6 +13,8 @@ Lab 5: Using Stacks and Queues to solve two problems:
 
 Lab 6: Using Recursion to reverse an array and to replace a char in a string
 
+Lab 7: Make a Sieve of Eratosthenes using ArrayList
+
 HW2: Write classes that represent various parts of a vending machine (Shelf.java and VendingItem.java).
 
 HW3: Create an algorithm for evaluating infix expressions.
