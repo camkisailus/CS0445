@@ -10,6 +10,7 @@ import java.io.IOException;
  * @author Brian Nixon
  * @version 1.0
  */
+
  public class StockManagementSystem extends ArrayList{
 	public ListInterface<Category> categories;
 
@@ -22,23 +23,32 @@ import java.io.IOException;
 	// creates a product and adds it to an existing category
 	public void createAndAddProduct(String categoryName, String productName, int quantity, double price) {
 		// TODO: Complete this method
-		Product prod = new Product(productName, quantity, price);
+		boolean found = false;
 		for(int i = 0;i<categories.getSize();i++){
 			if(categories.get(i).getCategoryName().equals(categoryName)){
+				found = true;
+				Product prod = new Product(productName, quantity, price);
 				categories.get(i).addProduct(prod);
 			}
+		}		
+		if(!found){
+			String err = "You tried to add a Product to a Category that does not exist. The Product will not be added.";
+			throw new InvalidInputException(err);
 		}
 	}
 
 	// returns the number of items (Sum of all quantities) in a category
 	public int getNumberOfStockedItemsInCategory(String categoryName) {
+		boolean found = false;
 		int quant = 0;
 		for(int i = 0;i<categories.getSize();i++){
 			if(categories.get(i).getCategoryName().equals(categoryName)){
+				found = true;
 				quant += categories.get(i).getTotalQuantityOfStock();
+				return quant;
 			}
 		}
-		return quant;
+		return 0;
 	}
 
 	// returns the number of stocked items (sum of all quantities) across multiple categories (given as a list)
@@ -58,53 +68,80 @@ import java.io.IOException;
 	// Search each category for the produtName
 	// When found, get the quantity of proudctName
 	public int getQuantityOfItemByName(String productName) {
+		boolean found = false;
 		for(int i = 0; i<categories.getSize();i++){
 			Category cat = categories.get(i);
 			ArrayList<Product> prods = (ArrayList<Product>) cat.getAllProducts();
 			for(int j = 0; j<prods.getSize();j++) {
 				if(prods.get(j).getItemName().equals(productName)) {
+					found = true;
 					return prods.get(j).getQuantityInStock();
 				}
 			}
+		}
+		if(!found){
+			String err = "The Product name you entered does not exist.";
+			throw new InvalidInputException(err);
 		}
 		return 0;
 	}
 
 	// sets the stocked quantity of a specific item
 	public void setQuantityOfItemByName(String productName, int newQuantity) {
+		if(newQuantity<0){
+			String err = "The Quantity you entered was less than 0.";
+			throw new InvalidInputException(err);
+		}
+		boolean found = false;
 		for(int i = 0; i<categories.getSize();i++){
 			Category cat = categories.get(i);
 			ArrayList<Product> prods = (ArrayList<Product>) cat.getAllProducts();
 			for(int j = 0; j<prods.getSize();j++) {
 				if(prods.get(j).getItemName().equals(productName)) {
+					found = true;
 					prods.get(j).setQuantityInStock(newQuantity);
 				}
 			}
+		}
+		if(!found){
+			String err = "The Product name you entered does not exist.";
+			throw new InvalidInputException(err);
 		}
 	}
 
 	// removes a product from the system
 	public Product removeProductByName(String productName) { 
+		boolean found = false;
 		for(int i = 0; i<categories.getSize();i++){
 			Category cat = categories.get(i);
 			ArrayList<Product> prods = (ArrayList<Product>) cat.getAllProducts();
 			for(int j = 0; j<prods.getSize();j++) {
 				if(prods.get(j).getItemName().equals(productName)) {
+					found = true;
 					return cat.removeProductByName(productName);
 				}
 			}
+		}
+		if(!found){
+			String err = "The Product name you entered does not exist.";
+			throw new InvalidInputException(err);
 		}
 		return null;
 	}
 
 	// removes a category from the system
 	public Category removeCategoryByName(String categoryName) {
+		boolean found = false;
 		for(int i = 0;i<categories.getSize();i++){
 			if(categories.get(i).getCategoryName().equals(categoryName)){
 				Category cat = categories.get(i);
 				categories.remove(i);
 				return cat;
 			}
+		}
+		if(!found){
+			String err = "The Category name you entered does not exist.";
+			throw new InvalidInputException(err);
 		}
 		return null;
 	}
@@ -118,10 +155,15 @@ import java.io.IOException;
 	// calculates and returns the total value of all items in a given category
 	public double totalValueOfItemsInCategory(String categoryName) {
 		double val = 0;
+		boolean found = false;
 		for(int i = 0;i<categories.getSize();i++){
 			if(categories.get(i).getCategoryName().equals(categoryName)) {
 				val = categories.get(i).getTotalValue();
 			}
+		}
+		if(!found){
+			String err = "The Category name you entered does not exist.";
+			throw new InvalidInputException(err);
 		}
 		return val;
 	}
