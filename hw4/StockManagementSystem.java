@@ -158,11 +158,12 @@ import java.io.IOException;
 		boolean found = false;
 		for(int i = 0;i<categories.getSize();i++){
 			if(categories.get(i).getCategoryName().equals(categoryName)) {
+				found = true;
 				val = categories.get(i).getTotalValue();
 			}
 		}
 		if(!found){
-			String err = "The Category name you entered does not exist.";
+			String err = "The Category name you entered does not exist. 123131";
 			throw new InvalidInputException(err);
 		}
 		return val;
