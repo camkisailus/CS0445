@@ -36,7 +36,7 @@ class Boggle {
     public Boggle(char[][] grid) throws Exception {
         this.grid = grid;
         // Initialize the dictionary here
-        dictionary = new BoggleDictionary(WORDLISTFILENAME);
+        dictionary = new SortedDictionary(WORDLISTFILENAME);
         // Initialize the of boggle board words here
         boggleWords = new HashSet<>();
         initDiceBag();

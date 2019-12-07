@@ -104,11 +104,9 @@ public class BoggleGUI extends JFrame {
 		// Clear board highlighting
 		theBoard.unHighlightAllDice();
 		// Allow edits to text area and set focus
-		 //wordEntryField.setReady();
+		wordEntryField.setReady();
 		// redraw the whole thing so it looks as nice as can be
 		repaint();
-
-		computerPlay();
 
 	}
 

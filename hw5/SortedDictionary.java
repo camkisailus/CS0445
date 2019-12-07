@@ -90,23 +90,7 @@ public class SortedDictionary implements DictionaryInterface {
     @Override
     public boolean checkWordBeginning(String word) {
        // TODO: Fill the code - You should use the binarySearch method that returns the position
-        /*int k = BinarySearch(dictionary, word);
-        if(dictionary.get(k)==word) return true;
-        String prev = dictionary.get(k-1);
-        String next = dictionary.get(k);
-        if(prev!=null&&next!=null){
-            if(prev.charAt(0)!=word.charAt(0) && next.charAt(0)==word.charAt(0)){
-                return true;
-            }
-        }else if(prev==null && next!=null){
-            if(next.charAt(0)==word.charAt(0)){
-                return true;
-            }
-        }else if(prev!=null && next == null){
-            if(prev.charAt(0)==word.charAt(0)){
-                return true;
-            }
-        }*/
+     
         return true;
     }
 
