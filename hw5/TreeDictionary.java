@@ -33,8 +33,11 @@ class TreeDictionary implements DictionaryInterface {
     public TreeDictionary(String fname) throws Exception {
         Scanner in = new Scanner(new File(fname));
 
-        // TODO: Fill the code add all the words using an iterator on the 'in' check BoggleDictionary
-        
+        while(in.hasNext()){
+            String word = in.next();
+            word = word.toUpperCase();
+            addWord(word);
+        }        
     }
 
     /**
@@ -45,8 +48,23 @@ class TreeDictionary implements DictionaryInterface {
      */
     @Override
     public void addWord(String word) {
-        // TODO: Fill the code - Iterate over the characters in the word and create a trie to mark the word set the Node.word=word
-        // TODO: Hint you can calculate the position using the ASCII (subtract 'A' )
+        Node p = root;
+        for(int i =0;i<=word.length();i++){
+            if(i==word.length()){
+                p.word=word;
+                return;
+            }
+            char c = word.charAt(i);
+            if(!Character.isAlphabetic(c)) return;
+            int index = c-'A';
+            if(p.links[index]==null){
+                Node temp = new Node();
+                p.links[index] = temp;
+                p=temp;
+            }else{
+                p=p.links[index];
+            }
+        }
 
     }
 
@@ -60,9 +78,19 @@ class TreeDictionary implements DictionaryInterface {
      */
     @Override
     public boolean checkWord(String word) {
+        Node p = root;
+        for(int i = 0; i<word.length();i++){
+            char c = word.charAt(i);
+            int index = c-'A';
+            if(p.links[index]!=null){
+                p=p.links[index];
+            }else{
+                return false;
+            }
 
-        // TODO: Fill the code - Remember the node's word is null if it's not a word
-
+        }
+        if(p.word!=null) return true;
+    
         return false;
     }
 
@@ -80,6 +108,10 @@ class TreeDictionary implements DictionaryInterface {
     public boolean checkWordBeginning(String word) {
         // TODO: Fill the code - Check the children of the trie
         // TODO: Hint you can calculate the position using the ASCII (subtract 'A' )
+        Node p = root;
+        char c = word.charAt(0);
+        int index = c -'A';
+        if(p.links[index]!=null) return true;
         return false;
     }
 

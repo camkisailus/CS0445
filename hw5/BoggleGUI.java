@@ -1,4 +1,4 @@
-package edu.pitt.cs.as5;
+package cs445.hw5;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -104,9 +104,12 @@ public class BoggleGUI extends JFrame {
 		// Clear board highlighting
 		theBoard.unHighlightAllDice();
 		// Allow edits to text area and set focus
-		wordEntryField.setReady();
+		 //wordEntryField.setReady();
 		// redraw the whole thing so it looks as nice as can be
 		repaint();
+
+		computerPlay();
+
 	}
 
 	/**
@@ -183,8 +186,10 @@ public class BoggleGUI extends JFrame {
 		computerArea.paintImmediately(computerArea.getVisibleRect());
 
 		String[] allWords = boggle.findWords();
+		System.out.println("Found words!");
 		computerArea.setName("Computer");
 		for (String newWord : allWords) {
+			System.out.println(newWord);
 			// Add word to appropriate score area & highlight appropriate dice
 			computerArea.addWord(newWord);
 			theBoard.highlightDice(boggle.findWord(newWord));
@@ -192,7 +197,7 @@ public class BoggleGUI extends JFrame {
 
 		theBoard.unHighlightAllDice(); // leave board unhighlighted when done
 
-		// computerPlayer.debug(); //Show debug info
+		//computerPlayer.debug(); //Show debug info
 	}
 
 	/**

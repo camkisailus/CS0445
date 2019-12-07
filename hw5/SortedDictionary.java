@@ -26,7 +26,6 @@ public class SortedDictionary implements DictionaryInterface {
      * @see BoggleGUI
      */
     private ArrayList<String> dictionary; // Stores dictionary
-    private int i =0;
 
     SortedDictionary() {
         dictionary = new ArrayList<String>();
@@ -44,28 +43,20 @@ public class SortedDictionary implements DictionaryInterface {
      * @use quickSort method to sort the end result
      */
     public void buildDictionary(String fname) throws Exception {
-        int i = 0;
         Scanner in = new Scanner(new File(fname));
-        System.out.println("Entering buildDictionary");
-
+        
         while(in.hasNext()){
             String word = in.next();
             word = word.toUpperCase();
             addWord(word);
         }
+        
         quickSort(dictionary,0,dictionary.size()-1);
-        System.out.println("Done sorting");
+        
+
+        
     }
     
-    public void checkSorting() {
-    	for(int i = 0; i<dictionary.size()-1;i++) {
-    		if(dictionary.get(i).compareTo(dictionary.get(i+1))>0) {
-    			System.out.println("Dictionary not sorted at index "+ i);
-    			System.out.println(dictionary.get(i)+" "+dictionary.get(i+1));
-    			break;
-    		}
-    	}
-    }
 
     /**
      * This method checks if a word is in the dictionary specified by
@@ -98,8 +89,25 @@ public class SortedDictionary implements DictionaryInterface {
      */
     @Override
     public boolean checkWordBeginning(String word) {
-        // TODO: Fill the code - You should use the binarySearch method that returns the position
-        return false;
+       // TODO: Fill the code - You should use the binarySearch method that returns the position
+        /*int k = BinarySearch(dictionary, word);
+        if(dictionary.get(k)==word) return true;
+        String prev = dictionary.get(k-1);
+        String next = dictionary.get(k);
+        if(prev!=null&&next!=null){
+            if(prev.charAt(0)!=word.charAt(0) && next.charAt(0)==word.charAt(0)){
+                return true;
+            }
+        }else if(prev==null && next!=null){
+            if(next.charAt(0)==word.charAt(0)){
+                return true;
+            }
+        }else if(prev!=null && next == null){
+            if(prev.charAt(0)==word.charAt(0)){
+                return true;
+            }
+        }*/
+        return true;
     }
 
     /**
@@ -113,10 +121,8 @@ public class SortedDictionary implements DictionaryInterface {
      * @return void
      */
     void quickSort(ArrayList<String> data, int low, int high) {
-    	System.out.println(i+", "+ low+", "+high);
-    	i++;
 
-        if(low<high) {
+    	if(low<high) {
         
 	        String pivot = data.get((low+high)/2);
 	        int left = low;
@@ -139,25 +145,17 @@ public class SortedDictionary implements DictionaryInterface {
      * @return the location of the pivot in the ArrayList
      */
     public int partition(ArrayList<String> data, int left, int right, String pivot) {
-        // TODO: Fill the code
-        // left and right represent the boundaries of elements we
-        // haven't partitioned Our goal is to get to all of them
-        // moving partitioned elements to either side as necessary.
-        
-    	
-    	
-    	/*while(left<right){
-            while(data.get(left).compareTo(pivot)<0){
-                left++;
-            }
-            while(data.get(right).compareTo(pivot)>0){
-                right--;
-            }
-            if(right>left){
-                swap(data, left, right);
+        int end = right;
+    	while(left<=right){
+            if(pivot.compareTo(data.get(left))<0) {
+            	swap(data,left,right);
+            	right--;
+            }else if(pivot.compareTo(data.get(left))>=0) {
+            	left++;
             }
         }
-        return right;*/
+    	swap(data,left,end+1);
+        return left;
     }
 
     /**
@@ -185,7 +183,6 @@ public class SortedDictionary implements DictionaryInterface {
      */
     boolean BinarySearch(ArrayList<String> s, int front, int back,
                                 String item) {
-        // TODO: Fill the code - Remember the compareTo
         while(front<=back){
             int mid = (front+back)/2;
             if(s.get(mid).compareToIgnoreCase(item)<0){
@@ -212,23 +209,31 @@ public class SortedDictionary implements DictionaryInterface {
      */
     static int BinarySearch(ArrayList<String> s, String item) {
         int mid, front = 0, back = s.size() - 1;
-        // TODO: Fill the code of binarySearch
+        while(front<=back){
+            mid = (front+back)/2;
+            if(s.get(mid).compareToIgnoreCase(item)<0){
+                front = mid+1;   
+            }else if(s.get(mid).compareToIgnoreCase(item)>0){
+                back = mid-1;    
+            }else{
+            	return mid;
+            }
+        }
         return front;
     }
 
     public static void main(String[] args) throws Exception {
         SortedDictionary sd = new SortedDictionary();
-        sd.buildDictionary("/Users/Cameron/Desktop/Desktop - MacBook Pro (64)/School/Fall 19/cs445/hw5/dictionaries/words.txt");
-        sd.checkSorting();
+        sd.buildDictionary(args[0]);
         @SuppressWarnings("resource")
         Scanner in = new Scanner(System.in);
-        /*while (true) {
+        while (true) {
             System.out.print("Enter word: ");
             String word = in.next();
             word = word.toUpperCase();
             if (sd.checkWord(word))
                 System.out.println("Word found");
-        }*/
+        }
 
     }
 }

@@ -1,4 +1,4 @@
-package edu.pitt.cs.as5;
+package cs445.hw5;
 
 import java.util.*;
 
@@ -155,7 +155,7 @@ class Boggle {
     /**
      * Method that finds if a given word
      * exists on the boggle
-     *
+     * 
      * @param word The given word to lookup
      * @return true if it was found, false otherwise
      * @see BoggleGUI

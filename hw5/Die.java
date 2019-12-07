@@ -1,4 +1,4 @@
-package edu.pitt.cs.as5;
+package cs445.hw5;
 import java.util.Random;
 
 /**
