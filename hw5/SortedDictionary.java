@@ -51,8 +51,7 @@ public class SortedDictionary implements DictionaryInterface {
             addWord(word);
         }
         
-        quickSort(dictionary,0,dictionary.size()-1);
-        
+        quickSort(dictionary,0,dictionary.size()-1);     
 
         
     }
@@ -90,8 +89,31 @@ public class SortedDictionary implements DictionaryInterface {
     @Override
     public boolean checkWordBeginning(String word) {
        // TODO: Fill the code - You should use the binarySearch method that returns the position
-     
-        return true;
+        int k = BinarySearch(dictionary, word);
+        if(dictionary.get(k).startsWith(word)) return true;
+        if(k==0){
+            String str = dictionary.get(k);
+            String next = dictionary.get(k+1);
+            if(str.startsWith(word) || next.startsWith(word)){
+                return true;
+            }
+            return false;
+        }else if (k==dictionary.size()){
+            String str = dictionary.get(k);
+            String prev = dictionary.get(k-1);
+            if(str.startsWith(word) || prev.startsWith(word)){
+                return true;
+            }
+            return false;
+
+        }else{
+            String next = dictionary.get(k+1);
+            String prev = dictionary.get(k-1);
+            if(next.startsWith(word) || prev.startsWith(word)){
+                return true;
+            }
+            return false;
+        }
     }
 
     /**

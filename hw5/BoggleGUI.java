@@ -184,10 +184,8 @@ public class BoggleGUI extends JFrame {
 		computerArea.paintImmediately(computerArea.getVisibleRect());
 
 		String[] allWords = boggle.findWords();
-		System.out.println("Found words!");
 		computerArea.setName("Computer");
 		for (String newWord : allWords) {
-			System.out.println(newWord);
 			// Add word to appropriate score area & highlight appropriate dice
 			computerArea.addWord(newWord);
 			theBoard.highlightDice(boggle.findWord(newWord));
